@@ -7,7 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "rollup test/index.tape.js | babel --presets=es2015 | tape"
+    "build-node": "babel --presets=es2015-node4 src/index.js -o index.js",
+    "pretest": "npm run build-node",
+    "test": "babel --presets=es2015-node4 test/index.tape.js | node"
   },
   "author": "André Arnold <andre.m.arnold@gmail.com>",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "babel-cli": "^6.16.0",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-es2015-node4": "^2.1.0",
-    "rollup": "^0.36.3"
+    "rollup": "^0.36.3",
+    "tape": "^4.6.2"
   }
 }
