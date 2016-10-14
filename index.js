@@ -178,12 +178,18 @@ function accessbuild_init(parent) {
 
 const accessbuild_prototype = {};
 
+function accessbuild_constructor(parent) {
+	accessbuild_init.apply(this, arguments);
+}
+define(accessbuild_constructor, "prototype", { value: accessbuild_prototype });
+define(accessbuild_prototype, "constructor", { value: accessbuild_constructor });
+
 function accessbuild$setSetter(func) {
 	if (typeof func !== "function") throw new TypeError("setter must be function");
 	this.__descriptor.set = func;
 	const done = this.__doneAfterNext;
 	this.__doneAfterNext = true;
-	return done ? this._commitToParent : this;
+	return done ? this._commitToParent() : this;
 }
 define(accessbuild_prototype, "set", { value: accessbuild$setSetter });
 
@@ -208,5 +214,6 @@ function accessbuild$only() {
 }
 define(accessbuild_prototype, "only", { get: accessbuild$only });
 
+exports.default = builder_create;
 exports.create = builder_create;
 exports.prototype = builder_prototype;
