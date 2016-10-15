@@ -49,7 +49,7 @@ function builder$prototype (prototype) {
 	else throw new TypeError("prototype creates new object")
 	return this
 }
-define(builder_prototype, "prototype", builder$prototype)
+define(builder_prototype, "prototype", {value:builder$prototype})
 
 function builder$commit () {
 	var key = this.__key

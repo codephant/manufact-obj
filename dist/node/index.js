@@ -56,7 +56,7 @@ function builder$prototype(prototype) {
 	if (this.__object == null) this.__object = Object.create(prototype);else throw new TypeError("prototype creates new object");
 	return this;
 }
-define(builder_prototype, "prototype", builder$prototype);
+define(builder_prototype, "prototype", { value: builder$prototype });
 
 function builder$commit() {
 	var key = this.__key;
