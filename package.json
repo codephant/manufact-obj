@@ -6,7 +6,7 @@
   "directories": {
     "test": "test",
     "lib_web": "dist/web",
-    "lib": "lib",
+    "lib": "dist/node",
     "src": "src"
   },
   "babel": {
@@ -15,6 +15,7 @@
     ]
   },
   "scripts": {
+    "build-index": "echo 'module.exports = require(\"./'$npm_package_directories_lib'\")' > index.js",
     "build-node": "babel $npm_package_directories_src -d $npm_package_directories_lib",
     "//pretest": "npm run build-node",
     "test": "node -r babel-register $npm_package_directories_test/index.tape"
