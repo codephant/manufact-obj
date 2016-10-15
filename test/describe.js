@@ -2,6 +2,7 @@ import tape from "tape"
 
 const noMore = (msg, cb) => tape.skip(msg, cb)
 const only = (msg, cb) => tape.only(msg, cb)
+const many = (...tests) => tests.forEach(t => t(describe))
 
 const describe = (tape => {
 	function wrapEnsure (t) { return (msg, cb) => t.test("it " + msg, cb) }
@@ -11,6 +12,11 @@ const describe = (tape => {
 	return function describe(something, cb) { tape(something, wrapOuterCb(cb)) }
 })(tape)
 
-Object.defineProperties(describe, { noMore:{ value:noMore }, only:{ value:only } })
+Object.defineProperties(describe
+,	{ noMore:{ value:noMore }
+	, only:{ value:only }
+	, many:{ value:many }
+	}
+)
 
 export default describe
