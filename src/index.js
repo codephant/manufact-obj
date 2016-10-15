@@ -192,8 +192,8 @@ function accessbuild$only () {
 }
 define(accessbuild_prototype, "only", {get:accessbuild$only})
 
+export default builder_create
 export
-{ builder_create as default
-, builder_create as create
+{ builder_create as create
 , builder_prototype as prototype
 }
