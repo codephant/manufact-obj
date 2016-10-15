@@ -1,12 +1,11 @@
 import tape from "tape"
-function describe(something, cb) {
-	tape(something, function describe_wrapper (t) {
-		cb(function it (ensuresSomething, innercb) {
-			t.test("it " + ensuresSomething, innercb)
-		})
-		t.end()
-	})
-}
+const describe = ((tape) => {
+	function wrapEnsure (t) { return (msg, cb) => t.test("it " + msg, cb) }
+	function wrapOuterCb (cb) {
+		return t => { const it = wrapEnsure(t); cb.call(it, it); t.end() }
+	}
+	return function describe(something, cb) { tape(something, wrapOuterCb(cb)) }
+})(tape)
 const not = { describe:(msg, cb)=>tape.skip(msg, cb) }
 
 
