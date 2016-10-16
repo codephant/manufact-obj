@@ -104,7 +104,7 @@ function builder$key (name, value) {
 	}
 	return this.enum.config.write.property(name, value)
 }
-define(builder_prototype, "key", builder$key)
+define(builder_prototype, "key", {value:builder$key})
 
 function builder$setEnumerable (value) {
 	value = (arguments.length < 1) || Boolean(value)
