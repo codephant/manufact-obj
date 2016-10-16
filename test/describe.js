@@ -1,5 +1,63 @@
 import tape from "tape"
 
+function createPrefixedAssert (assertKey, msgIdx) {
+	return Object.defineProperty
+	(	function prefixedAssert (...args) {
+			args[msgIdx] = this.__prefix + " (" + args[msgIdx] + ")"
+			return this.__test[assertKey].apply(this.__test, args)
+		}
+	,	"name", { configurable:true, value:assertKey + "Prefixed" }
+	)
+}
+
+const decoratedAssertions =
+[ "fail", "pass", "skip"
+, "assert", "true", "ok"
+, "notok", "false", "notOk"
+, "iferror", "ifErr", "ifError", "error"
+, "strictEquals", "strictEqual", "is", "isEqual", "equals", "equal"
+, "isInequal", "doesNotEqual", "not", "isNot", "isNotEqual", "notStrictEquals", "notStrictEqual", "notEquals", "notEqual"
+, "same", "isEquivalent", "deepEquals", "deepEqual"
+, "looseEquals", "looseEqual", "deepLooseEqual"
+, "isInequivalent", "isNotEquivalent", "isNotDeeply", "isNotDeepEqual", "notSame", "notDeeply", "notEquivalent", "notDeepEqual"
+, "notLooseEquals", "notLooseEqual", "notDeepLooseEqual"
+, "throws", "doesNotThrow"
+]
+.filter(k => typeof tape.Test.prototype[k] === "function") //future-proofing API changes and maybe typoes
+.reduce
+(	(o, k) => {
+		let v = tape.Test.prototype[k]
+		if (typeof v === "function") {
+			let m = String(v).match(/^function \((.+)\)/)
+			if (m && m[1].length) {
+				let i = m[1].split(",").map(s => s.trim()).indexOf("msg")
+				if (i > -1) Object.defineProperty(o, k, { value:createPrefixedAssert(k, i) })
+			}
+		}
+		return o
+	}
+,	{}
+)
+
+Object.defineProperties(decoratedAssertions
+,	{ end:{ value:function endPrefixed () {
+			const t = this.__test
+			return t.end.apply(t, arguments)
+		} }
+	, plan:{ value:function planPrefixes () {
+			const t = this.__test
+			return t.plan.apply(t, arguments)
+		} }
+	}
+)
+
+function prefixedAsserts (prefix, test) {
+	const o = Object.create(decoratedAssertions)
+	o.__prefix = prefix
+	o.__test = test
+	return o
+}
+
 const firstPair = o => {
 	const owns = Object.prototype.hasOwnProperty
 	let k
@@ -17,11 +75,13 @@ const many = (...tests) =>
 	)
 
 const describe = (tape => {
-	function wrapEnsure (t) { return (msg, cb) => t.test("it " + msg, cb) }
-	function wrapOuterCb (cb) {
-		return t => { const it = wrapEnsure(t); cb.call(it, it); t.end() }
+	function wrapEnsure (t, prefix) {
+		return (msg, cb) => t.test("it " + msg, t => cb(prefixedAsserts(prefix + ": " + msg, t)))
 	}
-	return function describe(something, cb) { tape(something, wrapOuterCb(cb)) }
+	function wrapOuterCb (cb, prefix) {
+		return t => { const it = wrapEnsure(t, prefix); cb.call(it, it); t.end() }
+	}
+	return function describe(something, cb) { tape(something, wrapOuterCb(cb, something)) }
 })(tape)
 
 Object.defineProperties(describe
