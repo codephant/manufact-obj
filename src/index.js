@@ -24,10 +24,23 @@ function firstPair (o) {
 	return [k, k == null ? void 0 : o[k]]
 }
 
+const createByFrom = Object.create(Object.prototype
+,	{ from:{ value:builder_createFrom } }
+)
+
 function builder_create (object) {
-	var builder = create(builder_prototype)
-	builder_init.apply(builder, arguments)
-	return builder
+	if (arguments.length) {
+		var builder = create(builder_prototype)
+		builder_init.apply(builder, arguments)
+		return builder
+	}
+	else {
+		return createByFrom
+	}
+}
+
+function builder_createFrom (proto) {
+	return builder_create(create(proto))
 }
 
 function builder_init (object) {
@@ -193,5 +206,6 @@ define(accessbuild_prototype, "only", {get:accessbuild$only})
 export default builder_create
 export
 { builder_create as create
+, builder_createFrom as createFrom
 , builder_prototype as prototype
 }
