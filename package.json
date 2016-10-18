@@ -1,11 +1,11 @@
 {
-  "name": "objbuild.js",
+  "name": "manufact-obj",
   "version": "1.0.0",
-  "description": "Well structured modules",
+  "description": "The full power of Object.defineProperty wrapped in a nice API",
   "main": "index.js",
   "directories": {
     "test": "test",
-    "lib_web": "dist/web",
+    "weblib": "dist/web",
     "lib": "dist/node",
     "src": "src"
   },
@@ -15,8 +15,10 @@
     ]
   },
   "scripts": {
+    "build": "npm run build-node && npm run build-index",
     "build-index": "echo 'module.exports = require(\"./'$npm_package_directories_lib'\")' > index.js",
     "build-node": "babel $npm_package_directories_src -d $npm_package_directories_lib",
+    "preinstall": "npm run build-node",
     "//pretest": "npm run build-node",
     "test": "node -r babel-register $npm_package_directories_test/index.tape"
   },
