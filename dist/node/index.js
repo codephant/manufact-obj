@@ -116,15 +116,8 @@ function builder$method(name, func) {
 define(builder_prototype, "method", { value: builder$method });
 
 function builder$key(name, value) {
-	if (arguments.length < 2) {
-		var _firstPair5 = firstPair(name);
-
-		var _firstPair6 = _slicedToArray(_firstPair5, 2);
-
-		name = _firstPair6[0];
-		value = _firstPair6[1];
-	}
-	return this.enum.config.write.property(name, value);
+	if (!(arguments.length < 2 && typeof name === "string")) this.write;
+	return this.enum.config.property.apply(this, arguments);
 }
 define(builder_prototype, "key", { value: builder$key });
 

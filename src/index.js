@@ -99,10 +99,8 @@ function builder$method (name, func) {
 define(builder_prototype, "method", {value:builder$method})
 
 function builder$key (name, value) {
-	if (arguments.length < 2) {
-		[name, value] = firstPair(name)
-	}
-	return this.enum.config.write.property(name, value)
+	if (!(arguments.length < 2 && typeof(name) === "string")) this.write
+	return this.enum.config.property.apply(this, arguments)
 }
 define(builder_prototype, "key", {value:builder$key})
 
