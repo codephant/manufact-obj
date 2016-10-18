@@ -15,11 +15,11 @@
     ]
   },
   "scripts": {
-    "build": "npm run build-node && npm run build-index",
+    "build": "npm run --silent build-node",
     "build-index": "echo 'module.exports = require(\"./'$npm_package_directories_lib'\")' > index.js",
     "build-node": "babel $npm_package_directories_src -d $npm_package_directories_lib",
-    "preinstall": "npm run build-node",
-    "//pretest": "npm run build-node",
+    "postbuild-node": "npm run --silent build-index",
+    "pretest": "npm run --silent build-node",
     "test": "node -r babel-register $npm_package_directories_test/index.tape"
   },
   "author": "André Arnold <andre.m.arnold@gmail.com>",
