@@ -20,7 +20,8 @@
     "build-node": "babel $npm_package_directories_src -d $npm_package_directories_lib",
     "postbuild-node": "npm run --silent build-index",
     "pretest": "npm run --silent build-node",
-    "test": "node -r babel-register $npm_package_directories_test/index.tape"
+    "test": "npm run --silent .test",
+    ".test": "node -r babel-register $npm_package_directories_test/index.tape"
   },
   "author": "André Arnold <andre.m.arnold@gmail.com>",
   "license": "ISC",
