@@ -11,14 +11,20 @@
   },
   "babel": {
     "presets": [
-      "es2015-node4"
+      "es2015-node6"
     ]
   },
   "scripts": {
     "build": "npm run --silent build-node",
     "build-index": "echo 'module.exports = require(\"./'$npm_package_directories_lib'\")' > index.js",
+
+    "prebuild-node": "rm -fr $npm_package_directories_lib/*",
     "build-node": "babel $npm_package_directories_src -d $npm_package_directories_lib",
     "postbuild-node": "npm run --silent build-index",
+
+    "prebuild-browser": "rm -fr $npm_package_directories_weblib/*",
+    "build-browser": "babel $npm_package_directories_weblib",
+
     "pretest": "npm run --silent build-node",
     "test": "npm run --silent .test",
     ".test": "node -r babel-register $npm_package_directories_test/index.tape"
@@ -28,9 +34,9 @@
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-preset-es2015": "^6.16.0",
-    "babel-preset-es2015-node4": "^2.1.0",
+    "babel-preset-es2015-node6": "^0.4.0",
     "babel-register": "^6.16.3",
     "rollup": "^0.36.3",
-    "tape-describe": "file:../tape-describe.js"
+    "tape-describe": "github:codephant/tape-describe#v0.1.0"
   }
 }
