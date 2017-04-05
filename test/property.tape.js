@@ -22,6 +22,15 @@ export default describe => {
 			ensure.end()
 		})
 
+		it("allows for shortcutting for readonly intermediate props", ensure => {
+			const test = () => "test"
+			const o = obj({}).property(test).end
+			ensure.deepEquals(desc(o, "test")
+			, { enumerable:false, configurable:false, get:test, set:undefined }
+			)
+			ensure.end()
+		})
+
 		it("allows detailed access specs", ensure => {
 			const getFoo = ()=>{}
 			const setFoo = ()=>{}

@@ -1,6 +1,6 @@
 {
   "name": "manufact-obj",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "The full power of Object.defineProperty wrapped in a nice API",
   "main": "index.js",
   "directories": {

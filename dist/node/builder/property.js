@@ -17,11 +17,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function builder$property(name, value) {
 	if (arguments.length < 2) {
-		if (typeof name === "string") {
-			this.__key = name;
-			return (0, _create2.default)(this);
+		switch (typeof name) {
+			case "string":
+				this.__key = name;
+				return (0, _create2.default)(this);
+			case "function":
+				this.__key = name.name;
+				this.__descriptor.get = name;
+				this._commit();
+				return this;
+			default:
+				[name, value] = (0, _firstPair2.default)(name);
 		}
-		[name, value] = (0, _firstPair2.default)(name);
 	}
 	this.__key = name;
 	this.__descriptor.value = value;
